@@ -13,10 +13,10 @@ class WelcomeCog(commands.Cog, name="Welcome"):
     async def on_member_join(self, member: discord.Member):
         """Welcome members when they join"""
         guild = self.bot.get_guild(config.GUILD_ID)
-        welcome_channel = guild.get_channel(config.WELCOME_CHANNEL_ID)
+        intro_channel = guild.get_channel(config.INTRO_CHANNEL_ID)
         rules_channel = guild.get_channel(config.RULES_CHANNEL_ID)
         if not member.bot:
-            await welcome_channel.send(
+            await intro_channel.send(
                 f"Welcome to the Dev Pro Tips Server, {member.mention}!\n"
                 f"Please read the rules in {rules_channel.mention} to gain access to the rest of the server!"
             )
