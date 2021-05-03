@@ -15,7 +15,7 @@ class WelcomeCog(commands.Cog, name="Welcome"):
         guild = self.bot.get_guild(config.GUILD_ID)
         intro_channel = guild.get_channel(config.INTRO_CHANNEL_ID)
         rules_channel = guild.get_channel(config.RULES_CHANNEL_ID)
-        if not member.bot:
+        if not member.bot and guild == member.guild:
             await intro_channel.send(
                 f"Welcome to the Dev Pro Tips Server, {member.mention}!\n"
                 f"Please read the rules in {rules_channel.mention} to gain access to the rest of the server!"
