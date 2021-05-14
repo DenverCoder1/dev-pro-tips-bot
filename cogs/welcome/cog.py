@@ -15,11 +15,16 @@ class WelcomeCog(commands.Cog, name="Welcome"):
         guild = self.bot.get_guild(config.GUILD_ID)
         intro_channel = guild.get_channel(config.INTRO_CHANNEL_ID)
         rules_channel = guild.get_channel(config.RULES_CHANNEL_ID)
-        if not member.bot and guild == member.guild:
-            await intro_channel.send(
-                f"Welcome to the Dev Pro Tips Server, {member.mention}!\n"
-                f"Please read the rules in {rules_channel.mention} to gain access to the rest of the server!"
-            )
+        # don't welcome bots or members of other guilds the bot is in
+        if member.bot or guild != member.guild:
+            return
+        # send welcome message
+        await intro_channel.send(
+            f"Welcome to the Dev Pro Tips Server, {member.mention}!\n"
+            f"Please read the rules in {rules_channel.mention} to gain access to the rest of the server!"
+        )
+        # give the "unassigned" role
+        await member.add_roles(guild.get_role(config.UNASSIGNED_ROLE_ID))
 
 
 # setup functions for bot
