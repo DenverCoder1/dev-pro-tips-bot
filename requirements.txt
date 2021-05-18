@@ -1,2 +1,3 @@
-discord.py
-python-dotenv
+discord.py==1.7.2
+python-dotenv==0.17.1
+feedparser==6.0.2
