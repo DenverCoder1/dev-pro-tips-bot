@@ -10,7 +10,11 @@ def main():
     intents.guilds = True
     intents.members = True
 
-    client = commands.Bot(command_prefix=config.PREFIX, intents=intents)
+    client = commands.Bot(
+        command_prefix=config.PREFIX,
+        intents=intents,
+        allowed_mentions=discord.AllowedMentions(everyone=True),
+    )
 
     @client.event
     async def on_ready():
