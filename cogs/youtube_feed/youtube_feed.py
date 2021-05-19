@@ -1,3 +1,4 @@
+import time
 import feedparser
 
 from .video import Video
@@ -7,6 +8,7 @@ class YouTubeFeed:
     """Feed for checking for new videos in a YouTube channel"""
 
     def __init__(self, channel_id: str):
+        self.__last_publish_date = 0
         self.__channel_id = channel_id
         self.update_feed()
 
