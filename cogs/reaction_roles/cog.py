@@ -21,9 +21,8 @@ class ReactionRolesCog(commands.Cog, name="Reaction Roles"):
         """Gives a role based on a reaction emoji"""
         role_assignment = self.reaction_handler.validate_reaction(payload)
         if role_assignment is not None:
-            await role_assignment.member.add_roles(role_assignment.role)
-            # add member role
-            await role_assignment.member.add_roles(self.member_role)
+            # add roles
+            await role_assignment.member.add_roles(role_assignment.role, self.member_role)
             # remove unassigned role
             await role_assignment.member.remove_roles(self.unassigned_role)
 
