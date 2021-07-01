@@ -19,7 +19,7 @@ class ReactionRolesCog(commands.Cog, name="Reaction Roles"):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         """Gives a role based on a reaction emoji"""
-        role_assignment = self.reaction_handler.validate_reaction(payload)
+        role_assignment = await self.reaction_handler.validate_reaction(payload)
         if role_assignment is not None:
             # add roles
             await role_assignment.member.add_roles(role_assignment.role, self.member_role)
@@ -29,7 +29,7 @@ class ReactionRolesCog(commands.Cog, name="Reaction Roles"):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         """Removes a role based on a reaction emoji"""
-        role_assignment = self.reaction_handler.validate_reaction(payload)
+        role_assignment = await self.reaction_handler.validate_reaction(payload)
         if role_assignment is not None:
             await role_assignment.member.remove_roles(role_assignment.role)
         
