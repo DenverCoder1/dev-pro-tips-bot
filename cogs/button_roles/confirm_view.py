@@ -8,7 +8,7 @@ VIEW_NAME = "ConfirmView"
 
 class ConfirmView(RoleView):
     def __init__(self):
-        super().__init__()
+        super().__init__(add_only=True)
 
     @nextcord.ui.button(
         label="Confirm",

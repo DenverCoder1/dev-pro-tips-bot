@@ -3,8 +3,13 @@ import config
 
 
 class RoleView(nextcord.ui.View):
-    def __init__(self):
+    def __init__(self, add_only: bool = False):
+        """
+        Args:
+            add_only - if True, only add the role, if False, remove it too
+        """
         super().__init__(timeout=None)
+        self.__add_only = add_only
 
     async def handle_click(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
@@ -13,7 +18,7 @@ class RoleView(nextcord.ui.View):
         role = interaction.guild.get_role(int(button.custom_id.split(":")[-1]))
         assert isinstance(role, nextcord.Role)
         # if member has the role, remove it
-        if role in interaction.user.roles:
+        if role in interaction.user.roles and not self.__add_only:
             await interaction.user.remove_roles(role)
             # send confirmation message
             await interaction.response.send_message(
