@@ -20,9 +20,9 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
         self.__channel: nextcord.TextChannel = self.__bot.get_channel(
             config.YOUTUBE_VIDEOS_CHANNEL_ID
         )
-        assert isinstance(self.__youtube_ping_role, nextcord.TextChannel)
+        assert isinstance(self.__channel, nextcord.TextChannel)
         # get role
-        self.__youtube_ping_role: nextcord.Role = self.__bot.get_role(
+        self.__youtube_ping_role: nextcord.Role = self.__channel.guild.get_role(
             config.YOUTUBE_PING_ROLE_ID
         )
         assert isinstance(self.__youtube_ping_role, nextcord.Role)
@@ -30,7 +30,7 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
         assert isinstance(self.__channel, nextcord.TextChannel)
         # start YouTube feed
         self.feed_loop.start()
-        print("Starting YouTube feed...")
+        print("YouTube feed started")
 
     @loop(seconds=CHECK_INTERVAL)
     async def feed_loop(self):

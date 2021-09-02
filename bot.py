@@ -10,11 +10,7 @@ def main():
     intents.guilds = True
     intents.members = True
 
-    client = commands.Bot(
-        command_prefix=config.PREFIX,
-        intents=intents,
-        allowed_mentions=nextcord.AllowedMentions(everyone=True),
-    )
+    client = commands.Bot(command_prefix=config.PREFIX, intents=intents)
 
     @client.event
     async def on_ready():

@@ -5,6 +5,7 @@ load_dotenv()
 
 # Bot setup
 PREFIX = "!"
+BOT_NAME = "DevProTips"
 BOT_TOKEN = os.getenv("DISCORD_TOKEN", "")
 
 # Discord Guild ID
@@ -22,6 +23,7 @@ DEVELOPER_ROLE_ID = int(os.getenv("DEVELOPER_ROLE_ID", ""))
 SUBSCRIBER_ROLE_ID = int(os.getenv("SUBSCRIBER_ROLE_ID", ""))
 MEMBER_ROLE_ID = int(os.getenv("MEMBER_ROLE_ID", ""))
 UNASSIGNED_ROLE_ID = int(os.getenv("UNASSIGNED_ROLE_ID", ""))
+YOUTUBE_PING_ROLE_ID = int(os.getenv("YOUTUBE_PING_ROLE_ID", ""))
 
 # Discord Message IDs
 RULES_MESSAGE_ID = int(os.getenv("RULES_MESSAGE_ID", ""))
