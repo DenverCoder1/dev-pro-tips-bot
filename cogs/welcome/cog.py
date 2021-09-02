@@ -1,5 +1,5 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import config
 
 
@@ -10,7 +10,7 @@ class WelcomeCog(commands.Cog, name="Welcome"):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_member_join(self, member: discord.Member):
+    async def on_member_join(self, member: nextcord.Member):
         """Welcome members when they join"""
         guild = self.bot.get_guild(config.GUILD_ID)
         intro_channel = guild.get_channel(config.INTRO_CHANNEL_ID)

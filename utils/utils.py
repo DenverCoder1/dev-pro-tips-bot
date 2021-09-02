@@ -1,5 +1,5 @@
 import re
-import discord
+import nextcord
 
 def blockquote(string: str) -> str:
     """Add blockquotes to a string"""
@@ -11,10 +11,10 @@ def blockquote(string: str) -> str:
 def embed_success(
     title: str,
     description: str = None,
-    colour: discord.Colour = discord.Colour.green(),
-) -> discord.Embed:
+    colour: nextcord.Colour = nextcord.Colour.green(),
+) -> nextcord.Embed:
     """Embed a success message and an optional description"""
-    embed = discord.Embed(title=title, colour=colour)
+    embed = nextcord.Embed(title=title, colour=colour)
     if description:
         embed.description = description
     return embed

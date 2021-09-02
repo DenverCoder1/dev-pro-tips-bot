@@ -1,5 +1,5 @@
 import sys
-from discord.ext import commands
+from nextcord.ext import commands
 from cogs.error.error_handler import ErrorHandler
 from cogs.error.error_logger import ErrorLogger
 import config

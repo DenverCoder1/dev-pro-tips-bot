@@ -1,7 +1,7 @@
 from typing import Optional
-from discord.ext import commands
+from nextcord.ext import commands
 from .role_assignment import RoleAssignment
-import discord
+import nextcord
 import config
 
 class ReactionHandler():
@@ -17,18 +17,18 @@ class ReactionHandler():
             "🚀": config.MEMBER_ROLE_ID,
         }
 
-    async def validate_reaction(self, payload: discord.RawReactionActionEvent) -> RoleAssignment:
+    async def validate_reaction(self, payload: nextcord.RawReactionActionEvent) -> RoleAssignment:
         # check that user reacted to the rules message
         if payload.message_id != self.role_message_id:
             return None
         # get guild
-        guild: Optional[discord.Guild] = self.bot.get_guild(payload.guild_id)
+        guild: Optional[nextcord.Guild] = self.bot.get_guild(payload.guild_id)
         assert(guild is not None)
         # get channel
-        channel: Optional[discord.TextChannel] = guild.get_channel(payload.channel_id)
+        channel: Optional[nextcord.TextChannel] = guild.get_channel(payload.channel_id)
         assert(channel is not None)
         # get message
-        message: Optional[discord.Message] = await channel.fetch_message(payload.message_id)
+        message: Optional[nextcord.Message] = await channel.fetch_message(payload.message_id)
         assert(message is not None)
         # get member
         member = payload.member or guild.get_member(payload.user_id)
@@ -44,7 +44,7 @@ class ReactionHandler():
             await message.remove_reaction(payload.emoji, member)
             return None
         # get role from the role id
-        role: Optional[discord.Role] = guild.get_role(role_id)
+        role: Optional[nextcord.Role] = guild.get_role(role_id)
         assert(role is not None)
         # return RoleAssignment containing member and role
         return RoleAssignment(member, role)
