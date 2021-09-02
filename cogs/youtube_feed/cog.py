@@ -20,6 +20,12 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
         self.__channel: nextcord.TextChannel = self.__bot.get_channel(
             config.YOUTUBE_VIDEOS_CHANNEL_ID
         )
+        assert isinstance(self.__youtube_ping_role, nextcord.TextChannel)
+        # get role
+        self.__youtube_ping_role: nextcord.Role = self.__bot.get_role(
+            config.YOUTUBE_PING_ROLE_ID
+        )
+        assert isinstance(self.__youtube_ping_role, nextcord.Role)
         # check that channel exists
         assert isinstance(self.__channel, nextcord.TextChannel)
         # start YouTube feed
@@ -34,7 +40,7 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
             return
         video = self.__feed.get_most_recent_video()
         await self.__channel.send(
-            f"@everyone **{video.author}** just posted a video! Go check it out!\n{video.link}"
+            f"{self.__youtube_ping_role.mention} **{video.author}** just posted a video! Go check it out!\n{video.link}"
         )
 
 
