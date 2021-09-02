@@ -1,8 +1,8 @@
 from datetime import datetime
-from discord.channel import TextChannel
-from discord.ext import commands
+from nextcord.channel import TextChannel
+from nextcord.ext import commands
 import traceback
-import discord
+import nextcord
 
 
 class ErrorLogger:
@@ -11,7 +11,7 @@ class ErrorLogger:
         self.log_channel_id = log_channel_id
         self.bot = bot
 
-    def log_to_file(self, error: Exception, message: discord.Message = None):
+    def log_to_file(self, error: Exception, message: nextcord.Message = None):
         """appends the date and logs text to a file"""
         with open(self.log_file, "a", encoding="utf-8") as f:
             # write the current time and log text at end of file
@@ -19,14 +19,14 @@ class ErrorLogger:
             f.write(self.__get_err_text(error, message) + "\n")
             f.write("--------------------------\n")
 
-    async def log_to_channel(self, error: Exception, message: discord.Message = None):
+    async def log_to_channel(self, error: Exception, message: nextcord.Message = None):
         log_channel = self.bot.get_channel(self.log_channel_id)
         if message is None:
             await log_channel.send(f"```{self.__get_err_text(error)}```")
         else:
             channel = (
                 message.channel.mention
-                if isinstance(message.channel, discord.TextChannel)
+                if isinstance(message.channel, nextcord.TextChannel)
                 else "DM"
             )
             await log_channel.send(
@@ -34,14 +34,14 @@ class ErrorLogger:
                 f" {channel}\n```{self.__get_err_text(error, message)}```"
             )
 
-    def __get_err_text(self, error: Exception, message: discord.Message = None):
+    def __get_err_text(self, error: Exception, message: nextcord.Message = None):
         trace = traceback.format_exc()
         description = trace if trace != "NoneType: None\n" else str(error)
         if message is None:
             return description
         return self.__attach_context(description, message)
 
-    def __attach_context(self, description: str, message: discord.Message):
+    def __attach_context(self, description: str, message: nextcord.Message):
         """returns human readable command error for logging in log channel"""
         return (
             f"Author:\n{message.author} ({message.author.display_name})\n\n"

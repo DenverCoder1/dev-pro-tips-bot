@@ -1,20 +1,16 @@
 import os
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import config
 
 
 def main():
     # allows privledged intents for monitoring members joining, roles editing, and role assignments
-    intents = discord.Intents.default()
+    intents = nextcord.Intents.default()
     intents.guilds = True
     intents.members = True
 
-    client = commands.Bot(
-        command_prefix=config.PREFIX,
-        intents=intents,
-        allowed_mentions=discord.AllowedMentions(everyone=True),
-    )
+    client = commands.Bot(command_prefix=config.PREFIX, intents=intents)
 
     @client.event
     async def on_ready():

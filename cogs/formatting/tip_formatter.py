@@ -1,6 +1,6 @@
 from utils.utils import blockquote
 from cogs.error.friendly_error import FriendlyError
-from discord.ext import commands
+from nextcord.ext import commands
 from .formatting_tip import Tip
 
 

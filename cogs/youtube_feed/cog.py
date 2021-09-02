@@ -1,7 +1,7 @@
 import config
-import discord
-from discord.ext import commands
-from discord.ext.tasks import loop
+import nextcord
+from nextcord.ext import commands
+from nextcord.ext.tasks import loop
 
 from .youtube_feed import YouTubeFeed
 
@@ -17,14 +17,20 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
     async def on_ready(self):
         """When discord is connected"""
         # get channel object
-        self.__channel: discord.TextChannel = self.__bot.get_channel(
+        self.__channel: nextcord.TextChannel = self.__bot.get_channel(
             config.YOUTUBE_VIDEOS_CHANNEL_ID
         )
+        assert isinstance(self.__channel, nextcord.TextChannel)
+        # get role
+        self.__youtube_ping_role: nextcord.Role = self.__channel.guild.get_role(
+            config.YOUTUBE_PING_ROLE_ID
+        )
+        assert isinstance(self.__youtube_ping_role, nextcord.Role)
         # check that channel exists
-        assert isinstance(self.__channel, discord.TextChannel)
+        assert isinstance(self.__channel, nextcord.TextChannel)
         # start YouTube feed
         self.feed_loop.start()
-        print("Starting YouTube feed...")
+        print("YouTube feed started")
 
     @loop(seconds=CHECK_INTERVAL)
     async def feed_loop(self):
@@ -34,7 +40,7 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
             return
         video = self.__feed.get_most_recent_video()
         await self.__channel.send(
-            f"@everyone **{video.author}** just posted a video! Go check it out!\n{video.link}"
+            f"{self.__youtube_ping_role.mention} **{video.author}** just posted a video! Go check it out!\n{video.link}"
         )
 
 

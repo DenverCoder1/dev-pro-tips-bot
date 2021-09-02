@@ -1,5 +1,5 @@
 from utils.utils import embed_success
-from discord.ext import commands
+from nextcord.ext import commands
 from .tip_formatter import TipFormatter
 
 

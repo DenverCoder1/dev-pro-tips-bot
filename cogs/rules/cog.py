@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 import config
 from utils.utils import embed_success
 from cogs.error.friendly_error import FriendlyError

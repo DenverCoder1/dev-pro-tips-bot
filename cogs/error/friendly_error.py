@@ -1,4 +1,4 @@
-import discord
+import nextcord
 
 
 class FriendlyError(Exception):
@@ -10,8 +10,8 @@ class FriendlyError(Exception):
     def __init__(
         self,
         msg: str,
-        channel: discord.TextChannel,
-        member: discord.Member = None,
+        channel: nextcord.TextChannel,
+        member: nextcord.Member = None,
         inner: Exception = None,
     ):
         self.channel = channel
@@ -24,5 +24,5 @@ class FriendlyError(Exception):
 
     async def reply(self):
         await self.channel.send(
-            embed=discord.Embed(title=str(self), colour=discord.Colour.red())
+            embed=nextcord.Embed(title=str(self), colour=nextcord.Colour.red())
         )

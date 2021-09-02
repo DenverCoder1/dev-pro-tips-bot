@@ -1,5 +1,7 @@
 import re
-import discord
+import nextcord
+import config
+
 
 def blockquote(string: str) -> str:
     """Add blockquotes to a string"""
@@ -8,13 +10,18 @@ def blockquote(string: str) -> str:
     return re.sub(r"(^|\n)(?!$)", r"\1> ", string.strip())
 
 
+def custom_id(view: str, id: int) -> str:
+    """create a custom id from the bot name : the view : the identifier"""
+    return f"{config.BOT_NAME}:{view}:{id}"
+
+
 def embed_success(
     title: str,
     description: str = None,
-    colour: discord.Colour = discord.Colour.green(),
-) -> discord.Embed:
+    colour: nextcord.Colour = nextcord.Colour.green(),
+) -> nextcord.Embed:
     """Embed a success message and an optional description"""
-    embed = discord.Embed(title=title, colour=colour)
+    embed = nextcord.Embed(title=title, colour=colour)
     if description:
         embed.description = description
     return embed
