@@ -17,7 +17,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * **Welcome** - Sends a welcome message to users and gives them the Unassigned role
 
-* **Reaction Roles** - Assigns roles when users react to the rules
+* **Button Roles** - Assigns roles when users click the button components
 
 * **YouTube Feed** - posts new videos from my YouTube channel in `#videos`
 
