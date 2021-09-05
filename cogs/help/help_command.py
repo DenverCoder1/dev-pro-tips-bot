@@ -68,7 +68,7 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                     name=name, value=value, inline=True))
 
         pages = menus.ButtonMenuPages(source=HelpPages(self, embed_fields), clear_buttons_after=True,
-                                      style=nextcord.ButtonStyle.primary, skip_double_triangle_buttons = lambda _: True)
+                                      style=nextcord.ButtonStyle.primary)
         await pages.start(self.context)
 
     async def send_cog_help(self, cog: commands.Cog):
