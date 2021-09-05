@@ -1,6 +1,37 @@
-from nextcord.ext import commands
-import nextcord
+from dataclasses import dataclass
+from typing import List
+
 import config
+import nextcord
+from nextcord.ext import commands, menus
+
+
+@dataclass
+class EmbedField:
+    name: str
+    value: str
+    inline: bool
+
+
+class HelpPages(menus.ListPageSource):
+    def __init__(self, help_command: "NewHelpCommand", data: List[EmbedField]):
+        self._help_command = help_command
+        super().__init__(data, per_page=2)
+
+    async def format_page(self, menu: menus.Menu, entries: List[EmbedField]) -> nextcord.Embed:
+        prefix = config.PREFIX
+        invoked_with = self._help_command.invoked_with
+        embed = nextcord.Embed(title="Bot Commands",
+                               colour=self._help_command.COLOUR)
+        embed.description = (
+            f'Use "{prefix}{invoked_with} command" for more info on a command.\n'
+            f'Use "{prefix}{invoked_with} category" for more info on a category.'
+        )
+        for entry in entries:
+            embed.add_field(name=entry.name, value=entry.value,
+                            inline=entry.inline)
+        return embed
+
 
 class NewHelpCommand(commands.MinimalHelpCommand):
     """Custom help command override using embeds"""
@@ -10,18 +41,20 @@ class NewHelpCommand(commands.MinimalHelpCommand):
 
     def get_command_signature(self, command: commands.core.Command):
         """Retrieves the signature portion of the help page."""
-        prefix = self.clean_prefix
+        prefix = config.PREFIX
         return f"{prefix}{command.qualified_name} {command.signature}"
 
     async def send_bot_help(self, mapping: dict):
         """implements bot command help page"""
-        prefix = self.clean_prefix
+        prefix = config.PREFIX
         invoked_with = self.invoked_with
         embed = nextcord.Embed(title="Bot Commands", colour=self.COLOUR)
         embed.description = (
             f'Use "{prefix}{invoked_with} command" for more info on a command.\n'
             f'Use "{prefix}{invoked_with} category" for more info on a category.'
         )
+
+        embed_fields: List[EmbedField] = []
 
         for cog, commands in mapping.items():
             name = "No Category" if cog is None else cog.qualified_name
@@ -31,9 +64,12 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                 value = "\u2002".join(f"`{prefix}{c.name}`" for c in filtered)
                 if cog and cog.description:
                     value = f"{cog.description}\n{value}"
-                embed.add_field(name=name, value=value, inline=True)
+                embed_fields.append(EmbedField(
+                    name=name, value=value, inline=True))
 
-        await self.get_destination().send(embed=embed)
+        pages = menus.ButtonMenuPages(source=HelpPages(self, embed_fields), clear_buttons_after=True,
+                                      style=nextcord.ButtonStyle.primary, skip_double_triangle_buttons = lambda _: True)
+        await pages.start(self.context)
 
     async def send_cog_help(self, cog: commands.Cog):
         """implements cog help page"""
@@ -51,7 +87,8 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                 inline=False,
             )
 
-        embed.set_footer(text=f"Use {config.PREFIX}help [command] for more info on a command.")
+        embed.set_footer(
+            text=f"Use {config.PREFIX}help [command] for more info on a command.")
         await self.get_destination().send(embed=embed)
 
     async def send_group_help(self, group: commands.Group):
