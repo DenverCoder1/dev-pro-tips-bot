@@ -1,3 +1,10 @@
+"""
+Help Cog with button component pagination by Jonah Lawrence (DenverCoder1)
+
+The basic embed help command is based on this gist by Rapptz
+https://gist.github.com/Rapptz/31a346ed1eb545ddeb0d451d81a60b3b
+"""
+
 from dataclasses import dataclass
 from typing import List
 
