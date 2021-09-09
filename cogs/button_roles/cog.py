@@ -1,8 +1,7 @@
-from cogs.button_roles.confirm_view import ConfirmView
-import nextcord
-from nextcord.ext import commands
-from .self_role_view import SelfRoleView
 import config
+from nextcord.ext import commands
+from .confirm_view import ConfirmView
+from .self_role_view import SelfRoleView
 
 
 class ButtonRolesCog(commands.Cog, name="Button Roles"):
@@ -14,9 +13,14 @@ class ButtonRolesCog(commands.Cog, name="Button Roles"):
     @commands.Cog.listener()
     async def on_ready(self):
         """When the bot is ready, load the role views"""
+        # skip this function if views are already added
+        if self.__bot.persistent_views_added:
+            return
         self.__bot.add_view(SelfRoleView())
         self.__bot.add_view(ConfirmView())
-        print("Button view added")
+        # set flag
+        self.__bot.persistent_views_added = True
+        print("Button views added")
 
     @commands.command()
     @commands.is_owner()

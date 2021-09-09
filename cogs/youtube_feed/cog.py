@@ -12,10 +12,13 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
     def __init__(self, bot: commands.Bot):
         self.__bot = bot
         self.__feed = YouTubeFeed(config.YT_CHANNEL_ID)
+        self.__started = False
 
     @commands.Cog.listener()
     async def on_ready(self):
         """When discord is connected"""
+        if self.__started:
+            return
         # get channel object
         self.__channel: nextcord.TextChannel = self.__bot.get_channel(
             config.YOUTUBE_VIDEOS_CHANNEL_ID
@@ -30,6 +33,8 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
         assert isinstance(self.__channel, nextcord.TextChannel)
         # start YouTube feed
         self.feed_loop.start()
+        # set flag
+        self.__started = True
         print("YouTube feed started")
 
     @loop(seconds=CHECK_INTERVAL)

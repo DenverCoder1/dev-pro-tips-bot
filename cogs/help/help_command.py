@@ -35,8 +35,9 @@ class HelpPages(menus.ListPageSource):
             f'Use "{prefix}{invoked_with} category" for more info on a category.'
         )
         for entry in entries:
-            embed.add_field(name=entry.name, value=entry.value,
-                            inline=entry.inline)
+            embed.add_field(
+                name=entry.name, value=entry.value, inline=entry.inline
+            )
         return embed
 
 
@@ -71,11 +72,15 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                 value = "\u2002".join(f"`{prefix}{c.name}`" for c in filtered)
                 if cog and cog.description:
                     value = f"{cog.description}\n{value}"
-                embed_fields.append(EmbedField(
-                    name=name, value=value, inline=True))
+                embed_fields.append(
+                    EmbedField(name=name, value=value, inline=True)
+                )
 
-        pages = menus.ButtonMenuPages(source=HelpPages(self, embed_fields), clear_buttons_after=True,
-                                      style=nextcord.ButtonStyle.primary)
+        pages = menus.ButtonMenuPages(
+            source=HelpPages(self, embed_fields),
+            clear_buttons_after=True,
+            style=nextcord.ButtonStyle.primary
+        )
         await pages.start(self.context)
 
     async def send_cog_help(self, cog: commands.Cog):

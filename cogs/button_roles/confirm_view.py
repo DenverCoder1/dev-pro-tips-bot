@@ -16,5 +16,5 @@ class ConfirmView(RoleView):
         style=nextcord.ButtonStyle.green,
         custom_id=custom_id(VIEW_NAME, config.MEMBER_ROLE_ID),
     )
-    async def subscriber_button(self, button, interaction):
+    async def confirm_button(self, button, interaction):
         await self.handle_click(button, interaction)

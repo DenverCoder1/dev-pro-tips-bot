@@ -10,19 +10,22 @@ def main():
     intents.guilds = True
     intents.members = True
 
-    client = commands.Bot(command_prefix=config.PREFIX, intents=intents)
+    bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
 
-    @client.event
+    # boolean that will be set to true when views are added
+    bot.persistent_views_added = False
+
+    @bot.event
     async def on_ready():
-        print(f"{client.user.name} has connected to Discord.")
+        print(f"{bot.user.name} has connected to Discord.")
 
     # load all cogs
     for folder in os.listdir("cogs"):
         if os.path.exists(os.path.join("cogs", folder, "cog.py")):
-            client.load_extension(f"cogs.{folder}.cog")
+            bot.load_extension(f"cogs.{folder}.cog")
 
     # run the bot
-    client.run(config.BOT_TOKEN)
+    bot.run(config.BOT_TOKEN)
 
 
 if __name__ == "__main__":
