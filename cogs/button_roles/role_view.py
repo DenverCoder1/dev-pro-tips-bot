@@ -15,7 +15,7 @@ class RoleView(nextcord.ui.View):
 
     def _check_required_roles(self, user: nextcord.Member):
         user_roles_ids = [role.id for role in user.roles]
-        return not all(role_id in user_roles_ids for role_id in self.__required_roles)
+        return all(role_id in user_roles_ids for role_id in self.__required_roles)
 
     async def handle_click(
         self, button: nextcord.ui.Button, interaction: nextcord.Interaction
