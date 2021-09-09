@@ -8,7 +8,7 @@ VIEW_NAME = "SelfRoleView"
 
 class SelfRoleView(RoleView):
     def __init__(self):
-        super().__init__()
+        super().__init__(required_roles=[config.MEMBER_ROLE_ID])
 
     @nextcord.ui.button(
         label="Subscriber",
