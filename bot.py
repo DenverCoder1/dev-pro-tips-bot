@@ -10,7 +10,9 @@ def main():
     intents.guilds = True
     intents.members = True
 
-    bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
+    activity = nextcord.Activity(type=nextcord.ActivityType.listening, name=f"{config.PREFIX}help")
+
+    bot = commands.Bot(command_prefix=config.PREFIX, intents=intents, activity=activity)
 
     # boolean that will be set to true when views are added
     bot.persistent_views_added = False
