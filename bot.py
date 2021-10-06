@@ -1,6 +1,9 @@
 import os
+
+import aiohttp
 import nextcord
 from nextcord.ext import commands
+
 import config
 
 
@@ -26,9 +29,13 @@ def main():
         if os.path.exists(os.path.join("cogs", folder, "cog.py")):
             bot.load_extension(f"cogs.{folder}.cog")
 
+    async def startup():
+        bot.session = aiohttp.ClientSession()
+
+    bot.loop.create_task(startup())
+
     # run the bot
     bot.run(config.BOT_TOKEN)
-
 
 if __name__ == "__main__":
     main()
