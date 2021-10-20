@@ -5,28 +5,21 @@ The basic embed help command is based on this gist by Rapptz
 https://gist.github.com/Rapptz/31a346ed1eb545ddeb0d451d81a60b3b
 """
 
-from dataclasses import dataclass
-from typing import List
-
-import config
 import nextcord
 from nextcord.ext import commands, menus
 
 
-@dataclass
-class EmbedField:
-    name: str
-    value: str
-    inline: bool
-
-
-class HelpPages(menus.ListPageSource):
-    def __init__(self, help_command: "NewHelpCommand", data: List[EmbedField]):
+class HelpPageSource(menus.ListPageSource):
+    def __init__(self, help_command, data):
         self._help_command = help_command
+        # you can set here how many items to display per page
         super().__init__(data, per_page=2)
 
-    async def format_page(self, menu: menus.Menu, entries: List[EmbedField]) -> nextcord.Embed:
-        prefix = config.PREFIX
+    async def format_page(self, menu, entries):
+        """
+        Returns an embed containing the entries for the current page
+        """
+        prefix = self._help_command.context.clean_prefix
         invoked_with = self._help_command.invoked_with
         embed = nextcord.Embed(title="Bot Commands",
                                colour=self._help_command.COLOUR)
@@ -34,11 +27,29 @@ class HelpPages(menus.ListPageSource):
             f'Use "{prefix}{invoked_with} command" for more info on a command.\n'
             f'Use "{prefix}{invoked_with} category" for more info on a category.'
         )
+        # add the entries to the embed
         for entry in entries:
-            embed.add_field(
-                name=entry.name, value=entry.value, inline=entry.inline
-            )
+            embed.add_field(name=entry[0], value=entry[1], inline=True)
+        # set the footer to display the page number
+        embed.set_footer(
+            text=f'Page {menu.current_page + 1}/{self.get_max_pages()}')
         return embed
+
+class HelpButtonMenuPages(menus.ButtonMenuPages):
+
+    FIRST_PAGE = "<:pagefirst:899973860772962344>"
+    PREVIOUS_PAGE = "<:pageprev:899973860965888010>"
+    NEXT_PAGE = "<:pagenext:899973860840050728>"
+    LAST_PAGE = "<:pagelast:899973860810694686>"
+    STOP = "<:stop:899973861444042782>"
+
+    def __init__(self, ctx: commands.Context, **kwargs):
+        super().__init__(**kwargs)
+        self._ctx = ctx
+
+    async def interaction_check(self, interaction: nextcord.Interaction) -> bool:
+        """Ensure that the user of the button is the one who called the help command"""
+        return self._ctx.author == interaction.user
 
 
 class NewHelpCommand(commands.MinimalHelpCommand):
@@ -49,12 +60,11 @@ class NewHelpCommand(commands.MinimalHelpCommand):
 
     def get_command_signature(self, command: commands.core.Command):
         """Retrieves the signature portion of the help page."""
-        prefix = config.PREFIX
-        return f"{prefix}{command.qualified_name} {command.signature}"
+        return f"{self.context.clean_prefix}{command.qualified_name} {command.signature}"
 
     async def send_bot_help(self, mapping: dict):
         """implements bot command help page"""
-        prefix = config.PREFIX
+        prefix = self.context.clean_prefix
         invoked_with = self.invoked_with
         embed = nextcord.Embed(title="Bot Commands", colour=self.COLOUR)
         embed.description = (
@@ -62,24 +72,25 @@ class NewHelpCommand(commands.MinimalHelpCommand):
             f'Use "{prefix}{invoked_with} category" for more info on a category.'
         )
 
-        embed_fields: List[EmbedField] = []
+        embed_fields = []
 
         for cog, commands in mapping.items():
             name = "No Category" if cog is None else cog.qualified_name
             filtered = await self.filter_commands(commands, sort=True)
             if filtered:
                 # \u2002 = en space
-                value = "\u2002".join(f"`{prefix}{c.name}`" for c in filtered)
+                value = "\u2002".join(
+                    f"`{self.context.clean_prefix}{c.name}`" for c in filtered)
                 if cog and cog.description:
                     value = f"{cog.description}\n{value}"
-                embed_fields.append(
-                    EmbedField(name=name, value=value, inline=True)
-                )
+                # add (name, value) pair to the list of fields
+                embed_fields.append((name, value))
 
-        pages = menus.ButtonMenuPages(
-            source=HelpPages(self, embed_fields),
-            clear_buttons_after=True,
-            style=nextcord.ButtonStyle.primary
+        # create a pagination menu that paginates the fields
+        pages = HelpButtonMenuPages(
+            ctx=self.context,
+            source=HelpPageSource(self, embed_fields),
+            disable_buttons_after=True
         )
         await pages.start(self.context)
 
@@ -100,7 +111,7 @@ class NewHelpCommand(commands.MinimalHelpCommand):
             )
 
         embed.set_footer(
-            text=f"Use {config.PREFIX}help [command] for more info on a command.")
+            text=f"Use {self.context.clean_prefix}help [command] for more info on a command.")
         await self.get_destination().send(embed=embed)
 
     async def send_group_help(self, group: commands.Group):
