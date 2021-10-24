@@ -1,6 +1,6 @@
 from nextcord.ext import commands
 import config
-from utils.utils import embed_success
+from utils.embedder import embed_success
 from cogs.error.friendly_error import FriendlyError
 
 class Rules(commands.Cog, name="Rules"):

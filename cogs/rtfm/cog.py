@@ -437,8 +437,7 @@ class Rtfm(commands.Cog):
 
         line = stream.readline()
         if "zlib" not in line:
-            raise RuntimeError(
-                "Invalid objects.inv file, not z-lib compatible.")
+            print("Invalid objects.inv file, not z-lib compatible.")
 
         entry_regex = re.compile(
             r"(?x)(.+?)\s+(\S*:\S*)\s+(-?\d+)\s+(\S+)\s+(.*)")
