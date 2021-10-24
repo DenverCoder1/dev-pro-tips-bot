@@ -9,7 +9,7 @@ class Ping(commands.Cog, name="Ping"):
     @commands.command()
     async def ping(self, ctx: commands.Context):
         """Checks for a response from the bot"""
-        await ctx.send("Pong")
+        await ctx.send(f"Pong! (Latency: {round(self.bot.latency * 1000)}ms)")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Ping(bot))
