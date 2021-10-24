@@ -1,6 +1,6 @@
 import config
 import sys
-from discord.ext import commands
+from nextcord.ext import commands
 from .error_handler import ErrorHandler
 from .error_logger import ErrorLogger
 
