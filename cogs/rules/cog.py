@@ -10,9 +10,9 @@ class Rules(commands.Cog, name="Rules"):
         self.bot = bot
 
     @commands.command(name="update_rules", hidden=True)
-    @commands.has_guild_permissions(manage_roles=True)
+    @commands.has_guild_permissions(administrator=True)
     async def update_rules(self, ctx: commands.Context, *, args=None):
-        """Checks for a response from the bot"""
+        """Allows admins to update the embed with the rules"""
         # get the message containing the rules
         channel = self.bot.get_channel(config.RULES_CHANNEL_ID)
         message = await channel.fetch_message(config.RULES_MESSAGE_ID)
