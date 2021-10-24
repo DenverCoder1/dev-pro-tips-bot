@@ -372,7 +372,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
-"""  # R. Danny (https://github.com/Rapptz/RoboDanny) license
+""" # R. Danny (https://github.com/Rapptz/RoboDanny) license
 
 
 import io
@@ -383,6 +383,7 @@ from typing import Dict
 
 import nextcord as discord
 from nextcord.ext import commands
+
 from utils import fuzzy
 
 
@@ -420,8 +421,6 @@ class SphinxObjectFileReader:
 
 
 class Rtfm(commands.Cog):
-    """Commands for fetching Python library documentation"""
-
     # full credit to https://github.com/Rapptz/RoboDanny
     def __init__(self, bot):
         self.bot = bot
@@ -434,13 +433,13 @@ class Rtfm(commands.Cog):
             raise RuntimeError("Invalid objects.inv file version.")
 
         projname = stream.readline().rstrip()[11:]
+        version = stream.readline().rstrip()[11:]  # not needed
 
         line = stream.readline()
         if "zlib" not in line:
-            print("Invalid objects.inv file, not z-lib compatible.")
+            raise RuntimeError("Invalid objects.inv file, not z-lib compatible.")
 
-        entry_regex = re.compile(
-            r"(?x)(.+?)\s+(\S*:\S*)\s+(-?\d+)\s+(\S+)\s+(.*)")
+        entry_regex = re.compile(r"(?x)(.+?)\s+(\S*:\S*)\s+(-?\d+)\s+(\S+)\s+(.*)")
         for line in stream.read_compressed_lines():
             match = entry_regex.match(line.rstrip())
             if not match:
@@ -461,8 +460,7 @@ class Rtfm(commands.Cog):
             prefix = f"{subdirective}:" if domain == "std" else ""
 
             if projname == "nextcord":
-                key = key.replace("nextcord.ext.commands.",
-                                  "").replace("nextcord.", "")
+                key = key.replace("nextcord.ext.commands.", "").replace("nextcord.", "")
 
             result[f"{prefix}{key}"] = os.path.join(url, location)
 
@@ -471,10 +469,10 @@ class Rtfm(commands.Cog):
     async def build_rtfm_lookup_table(self, page_types):
         cache = {}
         for key, page in page_types.items():
+            sub = cache[key] = {}
             async with self.bot.session.get(page + '/objects.inv') as resp:
                 if resp.status != 200:
-                    raise RuntimeError(
-                        'Cannot build rtfm lookup table, try again later.')
+                    raise RuntimeError('Cannot build rtfm lookup table, try again later.')
 
                 stream = SphinxObjectFileReader(await resp.read())
                 cache[key] = self.parse_object_inv(stream, page)
@@ -485,11 +483,6 @@ class Rtfm(commands.Cog):
         page_types = {
             'python': 'https://docs.python.org/3',
             'master': 'https://nextcord.readthedocs.io/en/latest',
-            'dpy': 'https://discordpy.readthedocs.io/en/latest/',
-            'dpy2': 'https://discordpy.readthedocs.io/en/master/',
-            'pycord': 'https://pycord.readthedocs.io/en/latest/',
-            'edpy': 'https://enhanced-dpy.readthedocs.io/en/latest/',
-            'disnake': 'https://disnake.readthedocs.io/en/latest/',
         }
 
         if obj is None:
@@ -500,10 +493,8 @@ class Rtfm(commands.Cog):
             await ctx.trigger_typing()
             await self.build_rtfm_lookup_table(page_types)
 
-        obj = re.sub(
-            r'^(?:discord\.(?:ext\.)?)?(?:commands\.)?(.+)', r'\1', obj)
-        obj = re.sub(
-            r'^(?:nextcord\.(?:ext\.)?)?(?:commands\.)?(.+)', r'\1', obj)
+        obj = re.sub(r'^(?:discord\.(?:ext\.)?)?(?:commands\.)?(.+)', r'\1', obj)
+        obj = re.sub(r'^(?:nextcord\.(?:ext\.)?)?(?:commands\.)?(.+)', r'\1', obj)
 
         if key.startswith('master'):
             # point the abc.Messageable types properly:
@@ -516,6 +507,9 @@ class Rtfm(commands.Cog):
                     break
 
         cache = list(self._rtfm_cache[key].items())
+
+        def transform(tup):
+            return tup[0]
 
         matches = fuzzy.finder(obj, cache, key=lambda t: t[0], lazy=False)[:8]
 
@@ -538,28 +532,11 @@ class Rtfm(commands.Cog):
     async def rtfm_python_cmd(self, ctx: commands.Context, *, obj: str = None):
         await self.do_rtfm(ctx, "python", obj)
 
-    @rtfm_group.command(name="dpy")
-    async def rtfm_dpy_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "dpy", obj)
-
-    @rtfm_group.command(name="pycord")
-    async def rtfm_pycord_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "pycord", obj)
-
-    @rtfm_group.command(name="edpy")
-    async def rtfm_edpy_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "edpy", obj)
-
-    @rtfm_group.command(name="disnake")
-    async def rtfm_disnake_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "disnake", obj)
-
     @commands.command(help="delete cache of rtfm (owner only)", aliases=["purge-rtfm", "delrtfm"])
     @commands.is_owner()
     async def rtfmcache(self, ctx: commands.Context):
         del self._rtfm_cache
-        embed = discord.Embed(title="Purged rtfm cache.",
-                              color=discord.Color.blurple())
+        embed = discord.Embed(title="Purged rtfm cache.", color=discord.Color.blurple())
         await ctx.send(embed=embed)
 
 
