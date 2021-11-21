@@ -4,13 +4,14 @@ import traceback
 from nextcord.ext import commands
 import nextcord
 
+MAX_MESSAGE_LENGTH = 2000
+
 
 class ErrorLogger:
 	def __init__(self, log_file: str, log_channel_id: int, bot: commands.Bot) -> None:
 		self.log_file = log_file
 		self.log_channel_id = log_channel_id
 		self.bot = bot
-
 
 	def log_to_file(
 		self, error: BaseException, message: Optional[nextcord.Message] = None
@@ -35,10 +36,14 @@ class ErrorLogger:
 				if isinstance(message.channel, nextcord.TextChannel)
 				else "DM"
 			)
-			await log_channel.send(
+			text = (
 				f"Error triggered by {message.author.mention} in"
 				f" {channel}\n```{self.__get_err_text(error, message)}```"
 			)
+			while len(text) > MAX_MESSAGE_LENGTH - 3:
+				await log_channel.send(text[:MAX_MESSAGE_LENGTH - 3] + "```")
+				text = "```" + text[MAX_MESSAGE_LENGTH - 3:]
+			await log_channel.send(text)
 
 	def __get_err_text(
 		self, error: BaseException, message: Optional[nextcord.Message] = None

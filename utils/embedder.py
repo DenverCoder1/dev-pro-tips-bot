@@ -3,15 +3,12 @@ from typing import Optional, Union
 import nextcord
 from nextcord.embeds import EmptyEmbed, _EmptyEmbed
 
+from utils.utils import trim
+
 DEFAULT_COLOR = nextcord.Colour.blurple()
 MAX_EMBED_DESCRIPTION_LENGTH = 4096
 MAX_EMBED_FIELD_TITLE_LENGTH = 256
 MAX_EMBED_FIELD_FOOTER_LENGTH = 2048
-
-
-def __trim(text: str, limit: int) -> str:
-    """limit text to a certain number of characters"""
-    return text[: limit - 3].strip() + "..." if len(text) > limit else text
 
 
 def embed_success(
@@ -68,12 +65,12 @@ def build_embed(
     """Embed a message and an optional description, footer, and url"""
     # create the embed
     embed = nextcord.Embed(
-        title=__trim(title, MAX_EMBED_FIELD_TITLE_LENGTH), url=url, colour=colour
+        title=trim(title, MAX_EMBED_FIELD_TITLE_LENGTH), url=url, colour=colour
     )
     if description:
-        embed.description = __trim(description, MAX_EMBED_DESCRIPTION_LENGTH)
+        embed.description = trim(description, MAX_EMBED_DESCRIPTION_LENGTH)
     if footer:
-        embed.set_footer(text=__trim(footer, MAX_EMBED_FIELD_FOOTER_LENGTH))
+        embed.set_footer(text=trim(footer, MAX_EMBED_FIELD_FOOTER_LENGTH))
     if image:
         embed.set_image(url=image)
     if thumbnail:

@@ -13,3 +13,7 @@ def blockquote(string: str) -> str:
 def custom_id(view: str, id: int) -> str:
     """create a custom id from the bot name : the view : the identifier"""
     return f"{config.BOT_NAME}:{view}:{id}"
+
+def trim(text: str, limit: int) -> str:
+    """limit text to a certain number of characters"""
+    return text[: limit - 3].strip() + "..." if len(text) > limit else text
