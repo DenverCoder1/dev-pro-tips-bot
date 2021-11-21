@@ -460,8 +460,12 @@ class Rtfm(commands.Cog):
             key = name if dispname == "-" else dispname
             prefix = f"{subdirective}:" if domain == "std" else ""
 
-            if projname == "nextcord":
-                key = key.replace("nextcord.ext.commands.", "").replace("nextcord.", "")
+            key = (
+                key.replace("nextcord.ext.commands.", "")
+                .replace("nextcord.ext.menus.", "")
+                .replace("nextcord.ext.ipc.", "")
+                .replace("nextcord.", "")
+            )
 
             result[f"{prefix}{key}"] = os.path.join(url, location)
 
@@ -486,9 +490,11 @@ class Rtfm(commands.Cog):
         page_types = {
             "python": "https://docs.python.org/3",
             "nextcord": "https://nextcord.readthedocs.io/en/latest",
+            "menus": "https://nextcord-ext-menus.readthedocs.io/en/latest",
+            "ipc": "https://nextcord-ext-ipc.readthedocs.io/en/latest",
             "dpy": "https://discordpy.readthedocs.io/en/latest",
             "dpy2": "https://discordpy.readthedocs.io/en/master",
-            "pycord": "https://pycord.readthedocs.io/en/latest",
+            "pycord": "https://docs.pycord.dev/en/master",
             "edpy": "https://enhanced-dpy.readthedocs.io/en/latest",
             "disnake": "https://disnake.readthedocs.io/en/latest",
         }
@@ -534,16 +540,24 @@ class Rtfm(commands.Cog):
         """Retrieve documentation on Python libraries"""
         await self.do_rtfm(ctx, "nextcord", obj)
 
+    @rtfm_group.command(name="menus")
+    async def rtfm_menus_cmd(self, ctx: commands.Context, *, obj: str = None):
+        await self.do_rtfm(ctx, "menus", obj)
+
+    @rtfm_group.command(name="ipc")
+    async def rtfm_ipc_cmd(self, ctx: commands.Context, *, obj: str = None):
+        await self.do_rtfm(ctx, "ipc", obj)
+
     @rtfm_group.command(name="python", aliases=["py"])
     async def rtfm_python_cmd(self, ctx: commands.Context, *, obj: str = None):
         await self.do_rtfm(ctx, "python", obj)
 
-    @rtfm_group.command(name="dpy")
+    @rtfm_group.command(name="discord.py", aliases=["dpy"])
     async def rtfm_dpy_cmd(self, ctx: commands.Context, *, obj: str = None):
         await self.do_rtfm(ctx, "dpy", obj)
 
     @rtfm_group.command(name="dpy2")
-    async def rtfm_dpy_cmd(self, ctx: commands.Context, *, obj: str = None):
+    async def rtfm_dpy2_cmd(self, ctx: commands.Context, *, obj: str = None):
         await self.do_rtfm(ctx, "dpy2", obj)
 
     @rtfm_group.command(name="pycord")
