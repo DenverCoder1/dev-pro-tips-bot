@@ -535,7 +535,7 @@ class Rtfm(commands.Cog):
             refer = ref.resolved.to_reference()
         await ctx.send(embed=e, reference=refer)
 
-    @commands.group(name="rtfm", aliases=["rtfd"], invoke_without_command=True)
+    @commands.group(name="rtfm", aliases=["rtfd", "rftm", "docs"], invoke_without_command=True)
     async def rtfm_group(self, ctx: commands.Context, *, obj: str = None):
         """Retrieve documentation on Python libraries"""
         await self.do_rtfm(ctx, "nextcord", obj)
