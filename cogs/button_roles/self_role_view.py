@@ -39,10 +39,31 @@ class SelfRoleView(RoleView):
         await self.handle_click(button, interaction)
 
     @nextcord.ui.button(
-        label="YouTube Ping",
+        label="Announcements Ping",
         emoji="🔔",
         style=nextcord.ButtonStyle.primary,
+        custom_id=custom_id(VIEW_NAME, config.ANNOUNCEMENTS_PING_ROLE_ID),
+        row=1,
+    )
+    async def announcements_ping_button(self, button, interaction):
+        await self.handle_click(button, interaction)
+
+    @nextcord.ui.button(
+        label="YouTube Ping",
+        emoji="📺",
+        style=nextcord.ButtonStyle.primary,
         custom_id=custom_id(VIEW_NAME, config.YOUTUBE_PING_ROLE_ID),
+        row=1,
     )
     async def youtube_ping_button(self, button, interaction):
+        await self.handle_click(button, interaction)
+
+    @nextcord.ui.button(
+        label="Giveaway Ping",
+        emoji="🎉",
+        style=nextcord.ButtonStyle.primary,
+        custom_id=custom_id(VIEW_NAME, config.GIVEAWAY_PING_ROLE_ID),
+        row=1,
+    )
+    async def giveaway_ping_button(self, button, interaction):
         await self.handle_click(button, interaction)

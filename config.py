@@ -24,6 +24,8 @@ SUBSCRIBER_ROLE_ID = int(os.getenv("SUBSCRIBER_ROLE_ID", ""))
 MEMBER_ROLE_ID = int(os.getenv("MEMBER_ROLE_ID", ""))
 UNASSIGNED_ROLE_ID = int(os.getenv("UNASSIGNED_ROLE_ID", ""))
 YOUTUBE_PING_ROLE_ID = int(os.getenv("YOUTUBE_PING_ROLE_ID", ""))
+ANNOUNCEMENTS_PING_ROLE_ID= int(os.getenv("ANNOUNCEMENTS_PING_ROLE_ID", ""))
+GIVEAWAY_PING_ROLE_ID = int(os.getenv("GIVEAWAY_PING_ROLE_ID", ""))
 
 # Discord Message IDs
 RULES_MESSAGE_ID = int(os.getenv("RULES_MESSAGE_ID", ""))
