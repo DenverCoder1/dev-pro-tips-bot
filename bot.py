@@ -13,9 +13,16 @@ def main():
     intents.guilds = True
     intents.members = True
 
-    activity = nextcord.Activity(type=nextcord.ActivityType.listening, name=f"{config.PREFIX}help")
+    activity = nextcord.Activity(
+        type=nextcord.ActivityType.listening, name=f"{config.PREFIX}help"
+    )
 
-    bot = commands.Bot(command_prefix=config.PREFIX, intents=intents, activity=activity)
+    bot = commands.Bot(
+        command_prefix=commands.when_mentioned_or(config.PREFIX),
+        intents=intents,
+        activity=activity,
+        owner_id=config.OWNER_ID,
+    )
 
     # boolean that will be set to true when views are added
     bot.persistent_views_added = False
@@ -36,6 +43,7 @@ def main():
 
     # run the bot
     bot.run(config.BOT_TOKEN)
+
 
 if __name__ == "__main__":
     main()
