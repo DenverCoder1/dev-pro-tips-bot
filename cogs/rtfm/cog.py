@@ -379,7 +379,7 @@ import io
 import os
 import re
 import zlib
-from typing import Dict
+from typing import Dict, Optional
 
 import nextcord as discord
 from nextcord.ext import commands
@@ -433,8 +433,8 @@ class Rtfm(commands.Cog):
         if inv_version != "# Sphinx inventory version 2":
             raise RuntimeError("Invalid objects.inv file version.")
 
-        projname = stream.readline().rstrip()[11:]
-        stream.readline().rstrip()[11:]  # version line is not needed
+        stream.readline().rstrip()[11:]  # Project name is not needed
+        stream.readline().rstrip()[11:]  # Version line is not needed
 
         line = stream.readline()
         if "zlib" not in line:
@@ -471,22 +471,22 @@ class Rtfm(commands.Cog):
 
         return result
 
-    async def build_rtfm_lookup_table(self, page_types):
+    async def build_docs_lookup_table(self, page_types):
         cache = {}
         for key, page in page_types.items():
             sub = cache[key] = {}
             async with self.bot.session.get(page + "/objects.inv") as resp:
                 if resp.status != 200:
                     raise RuntimeError(
-                        "Cannot build rtfm lookup table, try again later."
+                        "Cannot build docs lookup table, try again later."
                     )
 
                 stream = SphinxObjectFileReader(await resp.read())
                 cache[key] = self.parse_object_inv(stream, page)
 
-        self._rtfm_cache = cache
+        self._docs_cache = cache
 
-    async def do_rtfm(self, ctx, key, obj):
+    async def do_docs(self, ctx, key, obj):
         page_types = {
             "python": "https://docs.python.org/3",
             "nextcord": "https://nextcord.readthedocs.io/en/latest",
@@ -503,9 +503,9 @@ class Rtfm(commands.Cog):
             await ctx.send(page_types[key])
             return
 
-        if not hasattr(self, "_rtfm_cache"):
+        if not hasattr(self, "_docs_cache"):
             await ctx.trigger_typing()
-            await self.build_rtfm_lookup_table(page_types)
+            await self.build_docs_lookup_table(page_types)
 
         obj = re.sub(r"^(?:discord\.(?:ext\.)?)?(?:commands\.)?(.+)", r"\1", obj)
         obj = re.sub(r"^(?:nextcord\.(?:ext\.)?)?(?:commands\.)?(.+)", r"\1", obj)
@@ -520,9 +520,9 @@ class Rtfm(commands.Cog):
                     obj = f"abc.Messageable.{name}"
                     break
 
-        cache = list(self._rtfm_cache[key].items())
+        cache = list(self._docs_cache[key].items())
 
-        matches = fuzzy.finder(obj, cache, key=lambda t: t[0], lazy=False)[:8]
+        matches = fuzzy.finder(obj, cache, key=lambda t: t[0], lazy=False)[:8]  # type: ignore
 
         e = discord.Embed(colour=discord.Colour.blurple())
         if len(matches) == 0:
@@ -535,48 +535,58 @@ class Rtfm(commands.Cog):
             refer = ref.resolved.to_reference()
         await ctx.send(embed=e, reference=refer)
 
-    @commands.group(name="rtfm", aliases=["rtfd", "rftm", "docs"], invoke_without_command=True)
-    async def rtfm_group(self, ctx: commands.Context, *, obj: str = None):
+    @commands.group(
+        name="docs", aliases=["rtfd", "rftm", "rtfm"], invoke_without_command=True
+    )
+    async def docs_group(self, ctx: commands.Context, *, obj: Optional[str] = None):
         """Retrieve documentation on Python libraries"""
-        await self.do_rtfm(ctx, "nextcord", obj)
+        await self.do_docs(ctx, "nextcord", obj)
 
-    @rtfm_group.command(name="menus")
-    async def rtfm_menus_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "menus", obj)
+    @docs_group.command(name="menus")
+    async def docs_menus_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        await self.do_docs(ctx, "menus", obj)
 
-    @rtfm_group.command(name="ipc")
-    async def rtfm_ipc_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "ipc", obj)
+    @docs_group.command(name="ipc")
+    async def docs_ipc_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        await self.do_docs(ctx, "ipc", obj)
 
-    @rtfm_group.command(name="python", aliases=["py"])
-    async def rtfm_python_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "python", obj)
+    @docs_group.command(name="python", aliases=["py"])
+    async def docs_python_cmd(
+        self, ctx: commands.Context, *, obj: Optional[str] = None
+    ):
+        await self.do_docs(ctx, "python", obj)
 
-    @rtfm_group.command(name="discord.py", aliases=["dpy"])
-    async def rtfm_dpy_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "dpy", obj)
+    @docs_group.command(name="discord.py", aliases=["dpy"])
+    async def docs_dpy_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        await self.do_docs(ctx, "dpy", obj)
 
-    @rtfm_group.command(name="dpy2")
-    async def rtfm_dpy2_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "dpy2", obj)
+    @docs_group.command(name="dpy2")
+    async def docs_dpy2_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        await self.do_docs(ctx, "dpy2", obj)
 
-    @rtfm_group.command(name="pycord")
-    async def rtfm_pycord_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "pycord", obj)
+    @docs_group.command(name="pycord")
+    async def docs_pycord_cmd(
+        self, ctx: commands.Context, *, obj: Optional[str] = None
+    ):
+        await self.do_docs(ctx, "pycord", obj)
 
-    @rtfm_group.command(name="edpy")
-    async def rtfm_edpy_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "edpy", obj)
+    @docs_group.command(name="edpy")
+    async def docs_edpy_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        await self.do_docs(ctx, "edpy", obj)
 
-    @rtfm_group.command(name="disnake")
-    async def rtfm_disnake_cmd(self, ctx: commands.Context, *, obj: str = None):
-        await self.do_rtfm(ctx, "disnake", obj)
+    @docs_group.command(name="disnake")
+    async def docs_disnake_cmd(
+        self, ctx: commands.Context, *, obj: Optional[str] = None
+    ):
+        await self.do_docs(ctx, "disnake", obj)
 
-    @commands.command(help="delete cache of rtfm", aliases=["purge-rtfm", "delrtfm"])
+    @commands.command(
+        help="delete cache of docs", aliases=["rtfmcache", "purge-rtfm", "delrtfm"]
+    )
     @commands.is_owner()
-    async def rtfmcache(self, ctx: commands.Context):
-        del self._rtfm_cache
-        embed = discord.Embed(title="Purged rtfm cache.", color=discord.Color.blurple())
+    async def docscache(self, ctx: commands.Context):
+        del self._docs_cache
+        embed = discord.Embed(title="Purged docs cache.", color=discord.Color.blurple())
         await ctx.send(embed=embed)
 
 
