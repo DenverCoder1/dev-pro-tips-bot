@@ -15,11 +15,29 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!help` - displays more info about commands
 
+* `!roll` - roles a given amount of dice format `_d_`
+
+* `!choose` - chooses an item randomly from a list
+
+* `!docs` - fetch various python library documentation use `!help docs` for more info
+
 * **Welcome** - Sends a welcome message to users and gives them the Unassigned role
 
 * **Button Roles** - Assigns roles when users click the button components
 
 * **YouTube Feed** - posts new videos from my YouTube channel in `#videos`
+
+
+### Owner Commands
+
+* `!roles` - start a roles view, add or remove a role
+
+* `!add_confirm` - start a confirm view, confirm role was added
+
+### Owner Context Menu Commands
+
+* `giveaway` - start and create a giveaway
+
 
 ## Join the Discord Server
 
