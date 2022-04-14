@@ -419,7 +419,7 @@ class SphinxObjectFileReader:
                 pos = buf.find(b"\n")
 
 
-class Rtfm(commands.Cog):
+class Docs(commands.Cog):
     """Commands for fetching Python library documentation"""
 
     # full credit to https://github.com/Rapptz/RoboDanny
@@ -489,10 +489,11 @@ class Rtfm(commands.Cog):
     async def do_docs(self, ctx, key, obj):
         page_types = {
             "python": "https://docs.python.org/3",
-            "nextcord": "https://nextcord.readthedocs.io/en/latest",
+            "nextcord": "https://nextcord.readthedocs.io/en/stable",
+            "nextcord_latest": "https://nextcord.readthedocs.io/en/latest",
             "menus": "https://nextcord-ext-menus.readthedocs.io/en/latest",
             "ipc": "https://nextcord-ext-ipc.readthedocs.io/en/latest",
-            "dpy": "https://discordpy.readthedocs.io/en/latest",
+            "dpy": "https://discordpy.readthedocs.io/en/stable",
             "dpy2": "https://discordpy.readthedocs.io/en/master",
             "pycord": "https://docs.pycord.dev/en/master",
             "edpy": "https://enhanced-dpy.readthedocs.io/en/latest",
@@ -539,56 +540,67 @@ class Rtfm(commands.Cog):
         name="docs", aliases=["rtfd", "rftm", "rtfm"], invoke_without_command=True
     )
     async def docs_group(self, ctx: commands.Context, *, obj: Optional[str] = None):
-        """Retrieve documentation on Python libraries"""
+        """Retrieve documentation on Python libraries. Nextcord stable is used as the default."""
         await self.do_docs(ctx, "nextcord", obj)
 
+    @docs_group.command(name="nextcord", aliases=["nc", "ncstable", "stable"])
+    async def docs_nextcord(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on Nextcord stable."""
+        await self.do_docs(ctx, "nextcord", obj)
+
+    @docs_group.command(name="latest", aliases=["nclatest", "nextcord_latest"])
+    async def docs_nc_latest(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on Nextcord latest."""
+        await self.do_docs(ctx, "nextcord_latest", obj)
+
     @docs_group.command(name="menus")
-    async def docs_menus_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+    async def docs_menus(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on nextcord-ext-menus."""
         await self.do_docs(ctx, "menus", obj)
 
     @docs_group.command(name="ipc")
-    async def docs_ipc_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+    async def docs_ipc(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on nextcord-ext-ipc."""
         await self.do_docs(ctx, "ipc", obj)
 
     @docs_group.command(name="python", aliases=["py"])
-    async def docs_python_cmd(
-        self, ctx: commands.Context, *, obj: Optional[str] = None
-    ):
+    async def docs_python(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on Python."""
         await self.do_docs(ctx, "python", obj)
 
     @docs_group.command(name="discord.py", aliases=["dpy"])
-    async def docs_dpy_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+    async def docs_dpy(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on discord.py stable."""
         await self.do_docs(ctx, "dpy", obj)
 
     @docs_group.command(name="dpy2")
-    async def docs_dpy2_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+    async def docs_dpy2(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on discord.py master."""
         await self.do_docs(ctx, "dpy2", obj)
 
     @docs_group.command(name="pycord")
-    async def docs_pycord_cmd(
-        self, ctx: commands.Context, *, obj: Optional[str] = None
-    ):
+    async def docs_pycord(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on pycord."""
         await self.do_docs(ctx, "pycord", obj)
 
     @docs_group.command(name="edpy")
-    async def docs_edpy_cmd(self, ctx: commands.Context, *, obj: Optional[str] = None):
+    async def docs_edpy(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on enhanced-dpy."""
         await self.do_docs(ctx, "edpy", obj)
 
     @docs_group.command(name="disnake")
-    async def docs_disnake_cmd(
-        self, ctx: commands.Context, *, obj: Optional[str] = None
-    ):
+    async def docs_disnake(self, ctx: commands.Context, *, obj: Optional[str] = None):
+        """Retrieve documentation on disnake."""
         await self.do_docs(ctx, "disnake", obj)
 
-    @commands.command(
-        help="delete cache of docs", aliases=["rtfmcache", "purge-rtfm", "delrtfm"]
-    )
+    @commands.command(aliases=["rtfmcache", "purge-rtfm", "delrtfm"])
     @commands.is_owner()
     async def docscache(self, ctx: commands.Context):
+        """Purge the docs cache."""
         del self._docs_cache
         embed = discord.Embed(title="Purged docs cache.", color=discord.Color.blurple())
         await ctx.send(embed=embed)
 
 
 def setup(bot):
-    bot.add_cog(Rtfm(bot))
+    bot.add_cog(Docs(bot))
