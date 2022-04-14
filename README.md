@@ -30,7 +30,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 ### Owner Commands
 
-* `!roles` - start a roles view, add or remove a role
+* `!roles` - start a role view for users to add and remove their roles
 
 * `!add_confirm` - add a confirm button to a given message
 
