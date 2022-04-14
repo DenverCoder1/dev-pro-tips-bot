@@ -9,17 +9,35 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!markdown` - displays Discord markdown tips
 
-* `!update_rules` - mod command for updating the embed containing the rules
-
 * `!ping` - check for a response from the bot
 
 * `!help` - displays more info about commands
+
+* `!roll` - rolls a given amount of dice in the format `_d_`
+
+* `!choose` - chooses an item randomly from a list
+
+* `!docs` - fetch documentation for various Python libraries. Use `!help docs` for more info.
 
 * **Welcome** - Sends a welcome message to users and gives them the Unassigned role
 
 * **Button Roles** - Assigns roles when users click the button components
 
 * **YouTube Feed** - posts new videos from my YouTube channel in `#videos`
+
+
+### Owner Commands
+
+* `!roles` - start a role view for users to add and remove their roles
+
+* `!add_confirm` - add a confirm button to a given message
+
+* `!update_rules` - mod command for updating the embed containing the rules
+
+### Owner Context Menu Commands
+
+* `giveaway` - start and select winners for a giveaway
+
 
 ## Join the Discord Server
 
