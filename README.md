@@ -36,7 +36,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 ### Owner Context Menu Commands
 
-* `giveaway` - start and create a giveaway
+* `giveaway` - start and select winners for a giveaway
 
 
 ## Join the Discord Server
