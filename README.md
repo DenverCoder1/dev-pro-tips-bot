@@ -13,7 +13,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!help` - displays more info about commands
 
-* `!roll` - roles a given amount of dice in the format `_d_`
+* `!roll` - rolls a given amount of dice in the format `_d_`
 
 * `!choose` - chooses an item randomly from a list
 
