@@ -19,7 +19,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!choose` - chooses an item randomly from a list
 
-* `!docs` - fetch various python library documentation use `!help docs` for more info
+* `!docs` - fetch documentation for various Python libraries. Use `!help docs` for more info.
 
 * **Welcome** - Sends a welcome message to users and gives them the Unassigned role
 
