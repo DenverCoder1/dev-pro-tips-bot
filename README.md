@@ -32,7 +32,7 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!roles` - start a roles view, add or remove a role
 
-* `!add_confirm` - start a confirm view, confirm role was added
+* `!add_confirm` - add a confirm button to a given message
 
 ### Owner Context Menu Commands
 
