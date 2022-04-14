@@ -9,8 +9,6 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 
 * `!markdown` - displays Discord markdown tips
 
-* `!update_rules` - mod command for updating the embed containing the rules
-
 * `!ping` - check for a response from the bot
 
 * `!help` - displays more info about commands
@@ -33,6 +31,8 @@ Bot for the Dev Pro Tips YouTube Discussion and Support Server
 * `!roles` - start a role view for users to add and remove their roles
 
 * `!add_confirm` - add a confirm button to a given message
+
+* `!update_rules` - mod command for updating the embed containing the rules
 
 ### Owner Context Menu Commands
 
