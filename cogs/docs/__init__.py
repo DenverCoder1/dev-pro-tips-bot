@@ -489,10 +489,10 @@ class Docs(commands.Cog):
     async def do_docs(self, ctx, key, obj):
         page_types = {
             "python": "https://docs.python.org/3",
-            "nextcord": "https://nextcord.readthedocs.io/en/stable",
-            "nextcord_latest": "https://nextcord.readthedocs.io/en/latest",
-            "menus": "https://nextcord-ext-menus.readthedocs.io/en/latest",
-            "ipc": "https://nextcord-ext-ipc.readthedocs.io/en/latest",
+            "nextcord": "https://docs.nextcord.dev/en/stable",
+            "nextcord_latest": "https://docs.nextcord.dev/en/latest",
+            "menus": "https://menus.docs.nextcord.dev/en/latest",
+            "ipc": "https://ipc.docs.nextcord.dev/en/latest",
             "dpy": "https://discordpy.readthedocs.io/en/stable",
             "dpy2": "https://discordpy.readthedocs.io/en/latest",
             "pycord": "https://docs.pycord.dev/en/master",
