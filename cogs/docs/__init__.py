@@ -494,7 +494,7 @@ class Docs(commands.Cog):
             "menus": "https://nextcord-ext-menus.readthedocs.io/en/latest",
             "ipc": "https://nextcord-ext-ipc.readthedocs.io/en/latest",
             "dpy": "https://discordpy.readthedocs.io/en/stable",
-            "dpy2": "https://discordpy.readthedocs.io/en/master",
+            "dpy2": "https://discordpy.readthedocs.io/en/latest",
             "pycord": "https://docs.pycord.dev/en/master",
             "edpy": "https://enhanced-dpy.readthedocs.io/en/latest",
             "disnake": "https://disnake.readthedocs.io/en/latest",
