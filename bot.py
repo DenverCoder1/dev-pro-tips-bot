@@ -12,6 +12,7 @@ def main():
     intents = nextcord.Intents.default()
     intents.guilds = True
     intents.members = True
+    intents.message_content = True
 
     activity = nextcord.Activity(
         type=nextcord.ActivityType.listening, name=f"{config.PREFIX}help"
