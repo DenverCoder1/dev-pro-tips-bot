@@ -1,4 +1,4 @@
-nextcord==2.0.0b4
+nextcord==2.0.0rc1
 nextcord-ext-menus==1.5.3
 python-dotenv==0.20.0
 feedparser==6.0.10
