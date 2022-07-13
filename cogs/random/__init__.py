@@ -9,7 +9,7 @@ class Random(commands.Cog, name="Random"):
 
     @commands.command()
     async def roll(self, ctx: commands.Context, dice: str):
-        """Rolls a given amount of dice in the form _d_
+        """Rolls a given amount of dice in the form `_d_`
         
         Example: ?roll 2d20
         """
