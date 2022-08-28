@@ -1,0 +1,9 @@
+# fly.toml file generated for dev-pro-tips-bot on 2022-08-26T12:03:57-06:00
+
+app = "dev-pro-tips-bot"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+
