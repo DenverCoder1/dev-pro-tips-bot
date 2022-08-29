@@ -44,9 +44,14 @@ class YouTubeFeedCog(commands.Cog, name="YouTube Feed"):
         if not self.__feed.has_new_video():
             return
         video = self.__feed.get_most_recent_video()
-        await self.__channel.send(
+        message = await self.__channel.send(
             f"{self.__youtube_ping_role.mention} **{video.author}** just posted a video! Go check it out!\n{video.link}"
         )
+        # publish message
+        try:
+            await message.publish()
+        except Exception as e:
+            print(f"Error publishing message: {e}")
 
 
 def setup(bot: commands.Bot):
