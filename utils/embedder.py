@@ -1,7 +1,6 @@
-from typing import Optional, Union
+from typing import Optional
 
 import nextcord
-from nextcord.embeds import EmptyEmbed, _EmptyEmbed
 
 from utils.utils import trim
 
@@ -15,7 +14,7 @@ def embed_success(
     title: str,
     description: Optional[str] = None,
     footer: Optional[str] = None,
-    url: Union[str, _EmptyEmbed] = EmptyEmbed,
+    url: Optional[str] = None,
     image: Optional[str] = None,
     thumbnail: Optional[str] = None,
 ) -> nextcord.Embed:
@@ -29,7 +28,7 @@ def embed_warning(
     title: str,
     description: Optional[str] = None,
     footer: Optional[str] = None,
-    url: Union[str, _EmptyEmbed] = EmptyEmbed,
+    url: Optional[str] = None,
     image: Optional[str] = None,
     thumbnail: Optional[str] = None,
 ) -> nextcord.Embed:
@@ -43,7 +42,7 @@ def embed_error(
     title: str,
     description: Optional[str] = None,
     footer: Optional[str] = None,
-    url: Union[str, _EmptyEmbed] = EmptyEmbed,
+    url: Optional[str] = None,
     image: Optional[str] = None,
     thumbnail: Optional[str] = None,
 ) -> nextcord.Embed:
@@ -57,7 +56,7 @@ def build_embed(
     title: str,
     description: Optional[str] = None,
     footer: Optional[str] = None,
-    url: Union[str, _EmptyEmbed] = EmptyEmbed,
+    url: Optional[str] = None,
     colour: nextcord.Colour = DEFAULT_COLOR,
     image: Optional[str] = None,
     thumbnail: Optional[str] = None,
