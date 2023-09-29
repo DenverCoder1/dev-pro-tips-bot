@@ -55,6 +55,8 @@ class ErrorHandler:
 				f' command: {", ".join(str(perm) for perm in error.missing_perms)}.',
 				False,
 			)
+		elif isinstance(error, discord_err.CommandNotFound):
+			return f"Command {error.command_name} not found.", False
 		elif isinstance(error, discord_err.MissingRole):
 			return f"You do not have the required role to run this command.", False
 		elif isinstance(error, discord_err.CommandInvokeError):
